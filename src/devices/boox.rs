@@ -58,9 +58,9 @@ impl BooxNoteAir2 {
                 .unwrap()
                 .name("Virtual Tablet")
                 .input_id(InputId::new(BusType::BUS_VIRTUAL, 1, 1, 1))
-                .with_absolute_axis(abs_setup!(ABS_X, 0, 0, NOTE_AIR_2_MAX_Y, 0, 0, res_x))
+                .with_absolute_axis(abs_setup!(ABS_X, 0, 0, NOTE_AIR_2_MAX_X, 0, 0, res_y))
                 .unwrap()
-                .with_absolute_axis(abs_setup!(ABS_Y, 0, 0, NOTE_AIR_2_MAX_X, 0, 0, res_y))
+                .with_absolute_axis(abs_setup!(ABS_Y, 0, 0, NOTE_AIR_2_MAX_Y, 0, 0, res_x))
                 .unwrap()
                 .with_absolute_axis(abs_setup!(
                     ABS_PRESSURE,
