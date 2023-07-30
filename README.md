@@ -34,6 +34,8 @@ sudo ./target/release/vboox
 
 Currently only supports Boox Note Air 2 over usb however I would absolutely would love to expand on this project feel free to open any issues or pr's.
 
+If you want your device to have support you can help ! even if you don't write the driver yourself opening an issue and being willing to gather device specifications.
+
 ### How does this work ?
 
 This uses adb to fetch kernel input events via the builtin `getevent` tool on android - then it simply creates an appropriate virtual device via evdev and emits any events it reads from `getevent`.
