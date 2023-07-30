@@ -58,9 +58,9 @@ impl BooxNoteAir2 {
                 .unwrap()
                 .name("Virtual Tablet")
                 .input_id(InputId::new(BusType::BUS_VIRTUAL, 1, 1, 1))
-                .with_absolute_axis(abs_setup!(ABS_X, 0, 0, NOTE_AIR_2_MAX_X, 0, 0, res_y))
+                .with_absolute_axis(abs_setup!(ABS_X, 0, 0, NOTE_AIR_2_MAX_X, 0, 0, res_x))
                 .unwrap()
-                .with_absolute_axis(abs_setup!(ABS_Y, 0, 0, NOTE_AIR_2_MAX_Y, 0, 0, res_x))
+                .with_absolute_axis(abs_setup!(ABS_Y, 0, 0, NOTE_AIR_2_MAX_Y, 0, 0, res_y))
                 .unwrap()
                 .with_absolute_axis(abs_setup!(
                     ABS_PRESSURE,
@@ -159,14 +159,16 @@ impl BooxNoteAir2 {
             .spawn()
             .expect("Error reading events via getevent");
 
+        let mut raw = String::with_capacity(16);
         if let Some(stdout) = proc.stdout {
             let rdr = BufReader::new(stdout);
             rdr.lines().flatten().for_each(|ev| {
-                let raw = ev.split_whitespace().flat_map(|c| c.chars()).collect::<String>();
+                ev.split_whitespace().flat_map(|c| c.chars()).collect_into(&mut raw);
                 let typ = EventType(u16::from_str_radix(raw.get(..=3).unwrap(), 16).unwrap());
                 let cod = u16::from_str_radix(raw.get(4..=7).unwrap(), 16).unwrap();
                 let val = i64::from_str_radix(raw.get(8..).unwrap(), 16).unwrap();
                 _ = self.dev.emit(&[InputEvent::new_now(typ, cod, val as i32)]).unwrap();
+                raw.clear()
             });
         } else {
             eprintln!("Failed to read stdout from getevent over adb");
