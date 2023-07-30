@@ -28,6 +28,10 @@ sudo ./target/release/vboox
 ```
 **NOTE:** Currently this works (hopefully) only for the `Boox Note Air 2`
 
+## Wireless
+
+As of android 11 you can use adb wirelessly by enabling wireless debugging and pairing your device.
+
 ## FAQ
 
 ### Support for other tablets/devices ?
