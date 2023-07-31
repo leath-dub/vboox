@@ -8,5 +8,4 @@ fn main() {
     let mut dev = BooxNoteAir2::new().unwrap();
     dev.try_connect().unwrap();
     dev.fetch_events();
-    loop {}
 }
