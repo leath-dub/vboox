@@ -47,20 +47,14 @@ macro_rules! keys {
 
 impl BooxNoteAir2 {
     pub fn new() -> Option<Self> {
-        // Wayland and libinput is a piece of shit
-        let (res_x, res_y) = match option_env!("WAYLAND_DISPLAY") {
-            Some(_) => (NOTE_AIR_2_MAX_X, NOTE_AIR_2_MAX_Y),
-            None => (0, 0),
-        };
-
         return Some(BooxNoteAir2 {
             dev: VirtualDeviceBuilder::new()
                 .unwrap()
                 .name("Virtual Tablet")
                 .input_id(InputId::new(BusType::BUS_VIRTUAL, 1, 1, 1))
-                .with_absolute_axis(abs_setup!(ABS_X, 0, 0, NOTE_AIR_2_MAX_X, 0, 0, res_x))
+                .with_absolute_axis(abs_setup!(ABS_X, 0, 0, NOTE_AIR_2_MAX_X, 0, 0, NOTE_AIR_2_MAX_X))
                 .unwrap()
-                .with_absolute_axis(abs_setup!(ABS_Y, 0, 0, NOTE_AIR_2_MAX_Y, 0, 0, res_y))
+                .with_absolute_axis(abs_setup!(ABS_Y, 0, 0, NOTE_AIR_2_MAX_Y, 0, 0, NOTE_AIR_2_MAX_Y))
                 .unwrap()
                 .with_absolute_axis(abs_setup!(
                     ABS_PRESSURE,
