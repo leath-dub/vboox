@@ -9,13 +9,10 @@ use evdev::{
     uinput::{VirtualDevice, VirtualDeviceBuilder},
     AbsInfo, AbsoluteAxisType, AttributeSet, BusType, InputId, Key, UinputAbsSetup, InputEvent, EventType,
 };
+
 use regex::Regex;
 
-pub struct BooxNoteAir2 {
-    dev: VirtualDevice,
-    udev_path: String,
-    connected: bool,
-}
+use crate::devices::Device;
 
 const TIMEOUT: u64 = 10;
 const NOTE_AIR_2_MAX_X: i32 = 20966;
@@ -45,9 +42,15 @@ macro_rules! keys {
     );
 }
 
-impl BooxNoteAir2 {
-    pub fn new() -> Option<Self> {
-        return Some(BooxNoteAir2 {
+pub struct NoteAir2 {
+    dev: VirtualDevice,
+    udev_path: String,
+    connected: bool,
+}
+
+impl Device for NoteAir2 {
+    fn new() -> Option<Self> {
+        return Some(Self {
             dev: VirtualDeviceBuilder::new()
                 .unwrap()
                 .name("Virtual Tablet")
@@ -113,17 +116,7 @@ impl BooxNoteAir2 {
         });
     }
 
-    fn get_udev_path() -> String {
-        let output = Command::new("adb").args(["shell", "-T", "getevent", "-si"]).output().unwrap().stdout;
-        let re = Regex::new(r#"add device [0-9]+: (.*)\n\s*name:\s*"onyx_emp_Wacom I2C Digitizer""#).unwrap();
-
-        let binding = String::from_utf8(output).unwrap();
-        let cap = re.captures(&binding).unwrap().get(1).unwrap();
-
-        return cap.as_str().to_string();
-    }
-
-    pub fn try_connect(&mut self) -> Result<(), &'static str> {
+    fn try_connect(&mut self) -> Result<(), &'static str> {
         _ = Command::new("adb").args(["reconnect", "offline"]).output();
 
         println!("--- Press Accept to authorize usb debugging ---");
@@ -146,7 +139,7 @@ impl BooxNoteAir2 {
         return Err("Failed to connect");
     }
 
-    pub fn fetch_events(&mut self) {
+    fn fetch_events(&mut self) {
         let proc = Command::new("adb")
             .args(["shell", "-T", "getevent", &self.udev_path])
             .stdout(Stdio::piped())
@@ -169,3 +162,17 @@ impl BooxNoteAir2 {
         }
     }
 }
+
+impl NoteAir2 {
+    fn get_udev_path() -> String {
+        let output = Command::new("adb").args(["shell", "-T", "getevent", "-si"]).output().unwrap().stdout;
+        let re = Regex::new(r#"add device [0-9]+: (.*)\n\s*name:\s*"onyx_emp_Wacom I2C Digitizer""#).unwrap();
+
+        let binding = String::from_utf8(output).unwrap();
+        let cap = re.captures(&binding).unwrap().get(1).unwrap();
+
+        return cap.as_str().to_string();
+    }
+}
+
+pub type UltraTabC = NoteAir2;
