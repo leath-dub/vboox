@@ -3,7 +3,6 @@
 * Boox Ultra Tab C
 
 # vboox
-
 Virtual user space driver for boox devices
 
 ## Usage
@@ -28,6 +27,20 @@ and run it
 sudo ./target/release/vboox
 ```
 **NOTE:** Currently this works (hopefully)
+
+### Run in background (startup script)
+
+The `vbooxd.sh` script at the root of this repository can be run in the background like so
+```sh
+setsid -f sh -c 'exec ./vbooxd.sh <device name (e.g NoteAir2)> 2>&1 > /dev/null'
+```
+This will check by default every 10 seconds to see if you have a device connected (and allowed) and
+subsequently launch the driver.
+
+You can change the interval by running like so
+```sh
+setsid -f sh -c 'check_period_in_seconds=1 ./vboox.sh <device name (e.g UltraTabC)> 2>&1 > /dev/null'
+```
 
 ## Wireless
 
