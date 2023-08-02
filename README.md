@@ -1,5 +1,6 @@
 ⚠️  This project is experimental and currently only supports the following devices
 * Boox Note Air 2
+* Boox Ultra Tab C
 
 # vboox
 
@@ -26,7 +27,7 @@ and run it
 ```
 sudo ./target/release/vboox
 ```
-**NOTE:** Currently this works (hopefully) only for the `Boox Note Air 2`
+**NOTE:** Currently this works (hopefully)
 
 ## Wireless
 
@@ -36,7 +37,7 @@ As of android 11 you can use adb wirelessly by enabling wireless debugging and p
 
 ### Support for other tablets/devices ?
 
-Currently only supports Boox Note Air 2 over usb however I would absolutely would love to expand on this project feel free to open any issues or pr's.
+Currently works with usb and wifi connections, basically once you have an adb connection regardless of how, this program should work
 
 If you want your device to have support you can help ! even if you don't write the driver yourself opening an issue and being willing to gather device specifications.
 
