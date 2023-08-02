@@ -1,5 +1,3 @@
-#![feature(iter_collect_into)]
-
 mod devices;
 
 use devices::boox::BooxNoteAir2;

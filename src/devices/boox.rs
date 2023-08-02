@@ -157,7 +157,7 @@ impl BooxNoteAir2 {
         if let Some(stdout) = proc.stdout {
             let rdr = BufReader::new(stdout);
             rdr.lines().flatten().for_each(|ev| {
-                ev.split_whitespace().flat_map(|c| c.chars()).collect_into(&mut raw);
+                raw.extend(ev.split_whitespace().flat_map(|c| c.chars()));
                 let typ = EventType(u16::from_str_radix(raw.get(..=3).unwrap(), 16).unwrap());
                 let cod = u16::from_str_radix(raw.get(4..=7).unwrap(), 16).unwrap();
                 let val = i64::from_str_radix(raw.get(8..).unwrap(), 16).unwrap();
