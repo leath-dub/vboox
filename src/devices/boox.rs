@@ -53,7 +53,7 @@ impl Device for NoteAir2 {
         return Some(Self {
             dev: VirtualDeviceBuilder::new()
                 .unwrap()
-                .name("Virtual Tablet")
+                .name("Boox Virtual Tablet")
                 .input_id(InputId::new(BusType::BUS_VIRTUAL, 1, 1, 1))
                 .with_absolute_axis(abs_setup!(ABS_X, 0, 0, NOTE_AIR_2_MAX_X, 0, 0, NOTE_AIR_2_MAX_X))
                 .unwrap()

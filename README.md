@@ -39,7 +39,7 @@ subsequently launch the driver.
 
 You can change the interval by running like so
 ```sh
-setsid -f sh -c 'check_period_in_seconds=1 ./vboox.sh <device name (e.g UltraTabC)> 2>&1 > /dev/null'
+setsid -f sh -c 'check_period_in_seconds=1 ./vbooxd.sh <device name (e.g UltraTabC)> 2>&1 > /dev/null'
 ```
 
 ## Wireless
@@ -57,3 +57,12 @@ If you want your device to have support you can help ! even if you don't write t
 ### How does this work ?
 
 This uses adb to fetch kernel input events via the builtin `getevent` tool on android - then it simply creates an appropriate virtual device via evdev and emits any events it reads from `getevent`.
+
+### Permission Errors
+
+If you get permission errors you can set the binary to run as root like so
+```
+chown root /path/to/vboox
+chgrp root /path/to/vboox
+chmod u+s /path/to/vboox
+```
