@@ -54,7 +54,7 @@ impl Device for NoteAir2 {
             dev: VirtualDeviceBuilder::new()
                 .unwrap()
                 .name("Boox Virtual Tablet")
-                .input_id(InputId::new(BusType::BUS_VIRTUAL, 1, 1, 1))
+                .input_id(InputId::new(BusType::BUS_USB, 1, 1, 1))
                 .with_absolute_axis(abs_setup!(ABS_X, 0, 0, NOTE_AIR_2_MAX_X, 0, 0, NOTE_AIR_2_MAX_X))
                 .unwrap()
                 .with_absolute_axis(abs_setup!(ABS_Y, 0, 0, NOTE_AIR_2_MAX_Y, 0, 0, NOTE_AIR_2_MAX_Y))
@@ -105,8 +105,6 @@ impl Device for NoteAir2 {
                     Key::BTN_TOUCH,
                     Key::BTN_STYLUS,
                     Key::BTN_STYLUS2,
-                    Key::new(0x0152),
-                    Key::new(0x0153)
                 ])
                 .unwrap()
                 .build()
@@ -149,12 +147,18 @@ impl Device for NoteAir2 {
         let mut raw = String::with_capacity(16);
         if let Some(stdout) = proc.stdout {
             let rdr = BufReader::new(stdout);
+            let mut event_buf = Vec::new();
             rdr.lines().flatten().for_each(|ev| {
                 raw.extend(ev.split_whitespace().flat_map(|c| c.chars()));
                 let typ = EventType(u16::from_str_radix(raw.get(..=3).unwrap(), 16).unwrap());
                 let cod = u16::from_str_radix(raw.get(4..=7).unwrap(), 16).unwrap();
                 let val = i64::from_str_radix(raw.get(8..).unwrap(), 16).unwrap();
-                _ = self.dev.emit(&[InputEvent::new_now(typ, cod, val as i32)]).unwrap();
+                if typ == EventType::SYNCHRONIZATION {
+                    _ = self.dev.emit(event_buf.as_slice()).unwrap();
+                    event_buf.clear();
+                } else {
+                    event_buf.push(InputEvent::new_now(typ, cod, val as i32));
+                }
                 raw.clear()
             });
         } else {

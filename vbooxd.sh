@@ -1,6 +1,7 @@
 #!/bin/sh
 
 : ${check_period_in_seconds:=10}
+: ${vboox_bin_path:=$HOME/.local/bin/vboox}
 : ${vboox_bin:=vboox}
 
 set_device_name() {
@@ -29,7 +30,7 @@ vboox_running() {
 
 while :; do
     if ! vboox_running && boox_device_connected; then
-        setsid -f sh -c "exec $vboox_bin $device_name 2>&1 > /dev/null"
+        setsid -f sh -c "exec $vboox_bin_path $device_name 2>&1 > /dev/null"
     elif vboox_running && ! boox_device_connected; then
         for vboox in $(pidof $vboox_bin $device_name); do
             kill $vboox
