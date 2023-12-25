@@ -47,7 +47,6 @@ inputs = {
       default = let
         inherit vboox-bin;
         builder-script = pkgs.writeShellScriptBin "builder" ''
-          echo $run_vbooxd $out
           $busybox cp -r $run_vbooxd $out
         '';
       in derivation rec {
