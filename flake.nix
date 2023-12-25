@@ -32,6 +32,8 @@ inputs = {
     });
 
     packages = forAllSystems ({ pkgs, system }: with pkgs; rec {
+      default = daemon;
+
       vboox-bin = rustPlatform.buildRustPackage {
         pname = "vboox";
         version = "0.1.0";
@@ -44,7 +46,8 @@ inputs = {
         nativeBuildInputs = [ pkg-config ];
         buildInputs = [];
       };
-      default = let
+
+      daemon = let
         inherit vboox-bin;
         builder-script = pkgs.writeShellScriptBin "builder" ''
           $busybox cp -r $run_vbooxd $out
@@ -69,8 +72,8 @@ inputs = {
       };
     });
 
-    overlays.default = { final, prev }: {
-      run-vbooxd = self.packages.${final.stdenv.system}.default;
+    overlays.default = final: prev: {
+      run-vbooxd = self.packages.${final.stdenv.system}.daemon;
     };
   };
 }
