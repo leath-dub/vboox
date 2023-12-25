@@ -1,5 +1,9 @@
 #!/bin/sh
 
+set -e
+
+: ${busybox:=busybox}
+: ${adb:=adb}
 : ${check_period_in_seconds:=10}
 : ${vboox_bin_path:=$HOME/.local/bin/vboox}
 : ${vboox_bin:=vboox}
@@ -19,18 +23,18 @@ set_device_name() {
 }
 
 boox_device_connected() {
-    [ -n "$(adb devices -l | grep BOOX)" ]
+    [ -n "$($adb devices -l | grep BOOX)" ]
 }
 
 set_device_name $@
 
 vboox_running() {
-    [ -n "$(pgrep -x "$vboox_bin")" ]
+    [ -n "$($busybox pgrep -x "$vboox_bin")" ]
 }
 
 while :; do
     if ! vboox_running && boox_device_connected; then
-        setsid -f sh -c "exec $vboox_bin_path $device_name 2>&1 > /dev/null"
+        $busybox setsid sh -c "exec $vboox_bin_path $device_name 2>&1 > /dev/null"
     elif vboox_running && ! boox_device_connected; then
         for vboox in $(pidof $vboox_bin $device_name); do
             kill $vboox
