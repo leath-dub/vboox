@@ -68,5 +68,9 @@ inputs = {
         inherit system;
       };
     });
+
+    overlays.default = { final, prev }: {
+      run-vbooxd = self.packages.${final.stdenv.system}.default;
+    }
   };
 }
