@@ -18,6 +18,7 @@ inputs = {
       default = mkShell {
         buildInputs = [
           rust-bin.nightly.latest.default
+          rust-analyzer
           android-tools
         ];
 

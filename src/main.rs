@@ -8,7 +8,8 @@ use crate::devices::device_by_str;
 
 fn main() {
     let args: Vec<String> = args().collect();
-    if args.len() == 1 { // prompt user about devices available
+    if args.len() == 1 {
+        // prompt user about devices available
         for (i, dev_name) in DEVICE_LIST.into_iter().enumerate() {
             println!("{}: {}", i, dev_name);
         }
@@ -26,7 +27,7 @@ fn main() {
                 Err(e) => {
                     println!("{}: Enter a valid integer.", e);
                     continue;
-                },
+                }
             };
 
             match device_by_str(DEVICE_LIST[choice]) {
