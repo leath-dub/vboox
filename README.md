@@ -1,3 +1,6 @@
+In lieu of the rewrite to be more general: [droidux](https://github.com/leath-dub/droidux), I have
+archived this project. Please try out the new project !
+
 ⚠️  This project is experimental and currently only supports the following devices
 * Boox Note Air 2
 * Boox Ultra Tab C
